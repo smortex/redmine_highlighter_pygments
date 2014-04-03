@@ -26,7 +26,7 @@ module Redmine::SyntaxHighlighting::Pygments
       else
         hl_option = '-g'
       end
-      #"#{filename.inspect}:)" + text
+
       code = IO.popen("pygmentize #{hl_option} -f html", 'w+') do |pipe|
         pipe.print(text)
         pipe.close_write
@@ -36,16 +36,16 @@ module Redmine::SyntaxHighlighting::Pygments
     end
 
     def highlight_by_language(text, language)
-      unless language =~ /^[a-z]+$/
-      "#{language.inspect}:)" + text
-else
+      if language =~ /^[a-z]+$/
       code = IO.popen("pygmentize -l #{language} -f html", 'w+') do |pipe|
         pipe.puts(text)
         pipe.close_write
         pipe.read
       end
       code = code.sub(/^<div class="highlight"><pre>/, '').sub(/\n<\/pre><\/div>$/, '')
-end
+      else
+        text
+      end
     end
   end
 end
