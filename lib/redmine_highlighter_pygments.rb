@@ -18,7 +18,7 @@ module Redmine::SyntaxHighlighting::Pygments
     end
 
     def highlight_by_filename(text, filename)
-      filename = File.basename(filename)
+      filename = File.basename(filename).sub(/\.(example|sample)$/, '')
       language = eval(filename_to_language)
 
       if language then
